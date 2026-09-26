@@ -185,6 +185,4 @@ The tests force demo mode, so they do not spend Gemini API quota.
 
 FitBuddy is a wellness planning demo, not a medical device or personal medical advice service. AI prompts explicitly ask for conservative, general wellness guidance and to suggest professional evaluation where pain, injury or a medical condition is involved.
 
-## GitHub phase submission
 
-The SmartBridge instructions in the supplied project document ask for eight phase-wise submissions. The `docs/phases/` directory provides one markdown artifact for each phase, ready to commit into a public repository.
