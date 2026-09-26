@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}FitBuddy · Admin dashboard{% endblock %}
+{% block content %}
+<section class="result-header"><div><div class="eyebrow">ADMIN DASHBOARD</div><h1>All FitBuddy users</h1><p class="hero-lead">Review stored profiles and compare original versus updated plans.</p></div><div class="profile-pills"><span>{{ users|length }} users</span></div></section>
+<div class="admin-toolbar"><a class="secondary-button link-button" href="/">← Back to app</a><a class="ghost-link" href="/api/users">Open JSON API</a></div>
+<section class="admin-list">
+{% if not users %}<div class="glass-card empty-state">No users yet. Create a plan from the home page.</div>{% endif %}
+{% for user in users %}
+<article class="user-card glass-card">
+  <div class="user-summary"><div><div class="eyebrow">{{ user.user_id }}</div><h2>{{ user.username }}</h2><div class="muted">{{ user.age }} yrs · {{ user.weight }} kg · {{ user.goal }} · {{ user.intensity }}</div></div><button class="danger-button" type="button" onclick="deleteUser('{{ user.user_id }}')">Delete</button></div>
+  {% if user.plan %}
+  <div class="admin-plans"><div><div class="routine-label">ORIGINAL PLAN</div><pre>{{ user.plan.original_plan }}</pre></div><div><div class="routine-label">UPDATED PLAN</div><pre>{{ user.plan.updated_plan or 'No feedback update yet.' }}</pre></div></div>
+  <div class="muted small-line">Nutrition tip: {{ user.plan.nutrition_tip }}</div>
+  {% else %}<div class="muted">No plan stored.</div>{% endif %}
+</article>
+{% endfor %}
+</section>
+{% endblock %}

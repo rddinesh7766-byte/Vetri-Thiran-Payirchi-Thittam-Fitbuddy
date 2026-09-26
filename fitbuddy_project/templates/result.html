@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}FitBuddy · Your plan{% endblock %}
+{% block content %}
+<section class="result-header">
+  <div>
+    <div class="eyebrow">{% if updated %}UPDATED PLAN{% else %}PERSONALIZED PLAN{% endif %}</div>
+    <h1>Hello, {{ user.username }}.</h1>
+    <p class="hero-lead">{{ plan.overview }}</p>
+  </div>
+  <div class="profile-pills">
+    <span>{{ user.goal }}</span><span>{{ user.intensity }} intensity</span><span>{{ user.weight }} kg</span><span>{{ user.age }} yrs</span>
+  </div>
+</section>
+
+{% if message %}<div class="alert success">{{ message }}</div>{% endif %}
+
+<section class="plan-grid">
+{% for day in plan.days %}
+  <article class="day-card {% if loop.index == 1 %}featured{% endif %}">
+    <div class="day-top"><div class="day-number">{{ '%02d'|format(loop.index) }}</div><div><h2>{{ day.day }}</h2><div class="day-focus">{{ day.focus }}</div></div><div class="duration">{{ day.duration_minutes }} min</div></div>
+    <div class="routine"><div class="routine-label">WARM-UP</div><p>{{ day.warm_up }}</p></div>
+    <div class="routine"><div class="routine-label">MAIN WORKOUT</div>
+      <div class="exercise-table">
+        <div class="exercise-row header"><span>Exercise</span><span>Sets</span><span>Reps / time</span><span>Rest</span></div>
+        {% for ex in day.exercises %}
+        <div class="exercise-row"><span><strong>{{ ex.name }}</strong>{% if ex.notes %}<small>{{ ex.notes }}</small>{% endif %}</span><span>{{ ex.sets }}</span><span>{{ ex.reps_or_duration }}</span><span>{{ ex.rest }}</span></div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="two-col-routine"><div><div class="routine-label">COOLDOWN</div><p>{{ day.cool_down }}</p></div><div><div class="routine-label">RECOVERY</div><p>{{ day.recovery }}</p></div></div>
+  </article>
+{% endfor %}
+</section>
+
+<section class="lower-grid">
+  <div class="glass-card">
+    <div class="card-heading"><span>TIP</span><div><div class="card-title">Nutrition & recovery</div><div class="muted">A concise habit to complement your week.</div></div></div>
+    <p class="tip-text">{{ nutrition_tip }}</p>
+  </div>
+  <div class="glass-card">
+    <div class="card-heading"><span>FEEDBACK</span><div><div class="card-title">Make it fit better</div><div class="muted">Tell FitBuddy what you want changed.</div></div></div>
+    <form action="/submit-feedback" method="post" data-loading-form>
+      <input type="hidden" name="user_id" value="{{ user.user_id }}">
+      <textarea name="feedback" required minlength="5" maxlength="1200" placeholder="Example: Add more cardio, reduce leg volume, and give me one extra rest day."></textarea>
+      <button class="secondary-button" type="submit"><span>Update My Plan</span><span>↻</span></button>
+    </form>
+  </div>
+</section>
+
+<section class="weekly-notes">
+  <div class="eyebrow">WEEKLY NOTES</div>
+  <div class="notes-row">{% for note in plan.weekly_notes %}<div>✓ {{ note }}</div>{% endfor %}</div>
+</section>
+
+<section class="action-row"><a class="secondary-button link-button" href="/">← Create another plan</a><a class="ghost-link" href="/docs" target="_blank">Open API docs</a></section>
+{% endblock %}
